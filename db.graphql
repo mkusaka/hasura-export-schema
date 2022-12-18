@@ -1,0 +1,1065 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""whether this query should be cached (Hasura Cloud only)"""
+directive @cached(
+  """measured in seconds"""
+  ttl: Int! = 60
+
+  """refresh the cache entry"""
+  refresh: Boolean! = false
+) on QUERY
+
+"""
+Boolean expression to compare columns of type "Int". All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""
+Boolean expression to compare columns of type "String". All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+
+  """does the column match the given case-insensitive pattern"""
+  _ilike: String
+  _in: [String!]
+
+  """
+  does the column match the given POSIX regular expression, case insensitive
+  """
+  _iregex: String
+  _is_null: Boolean
+
+  """does the column match the given pattern"""
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+
+  """does the column NOT match the given case-insensitive pattern"""
+  _nilike: String
+  _nin: [String!]
+
+  """
+  does the column NOT match the given POSIX regular expression, case insensitive
+  """
+  _niregex: String
+
+  """does the column NOT match the given pattern"""
+  _nlike: String
+
+  """
+  does the column NOT match the given POSIX regular expression, case sensitive
+  """
+  _nregex: String
+
+  """does the column NOT match the given SQL regular expression"""
+  _nsimilar: String
+
+  """
+  does the column match the given POSIX regular expression, case sensitive
+  """
+  _regex: String
+
+  """does the column match the given SQL regular expression"""
+  _similar: String
+}
+
+"""ordering argument of a cursor"""
+enum cursor_ordering {
+  """ascending ordering of the cursor"""
+  ASC
+
+  """descending ordering of the cursor"""
+  DESC
+}
+
+"""mutation root"""
+type mutation_root {
+  """
+  delete data from the table: "postalcodes"
+  """
+  delete_postalcodes(
+    """filter the rows which have to be deleted"""
+    where: postalcodes_bool_exp!
+  ): postalcodes_mutation_response
+
+  """
+  delete single row from the table: "postalcodes"
+  """
+  delete_postalcodes_by_pk(id: Int!): postalcodes
+
+  """
+  delete data from the table: "prefectures"
+  """
+  delete_prefectures(
+    """filter the rows which have to be deleted"""
+    where: prefectures_bool_exp!
+  ): prefectures_mutation_response
+
+  """
+  delete single row from the table: "prefectures"
+  """
+  delete_prefectures_by_pk(id: Int!): prefectures
+
+  """
+  insert data into the table: "postalcodes"
+  """
+  insert_postalcodes(
+    """the rows to be inserted"""
+    objects: [postalcodes_insert_input!]!
+
+    """upsert condition"""
+    on_conflict: postalcodes_on_conflict
+  ): postalcodes_mutation_response
+
+  """
+  insert a single row into the table: "postalcodes"
+  """
+  insert_postalcodes_one(
+    """the row to be inserted"""
+    object: postalcodes_insert_input!
+
+    """upsert condition"""
+    on_conflict: postalcodes_on_conflict
+  ): postalcodes
+
+  """
+  insert data into the table: "prefectures"
+  """
+  insert_prefectures(
+    """the rows to be inserted"""
+    objects: [prefectures_insert_input!]!
+
+    """upsert condition"""
+    on_conflict: prefectures_on_conflict
+  ): prefectures_mutation_response
+
+  """
+  insert a single row into the table: "prefectures"
+  """
+  insert_prefectures_one(
+    """the row to be inserted"""
+    object: prefectures_insert_input!
+
+    """upsert condition"""
+    on_conflict: prefectures_on_conflict
+  ): prefectures
+
+  """
+  update data of the table: "postalcodes"
+  """
+  update_postalcodes(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: postalcodes_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: postalcodes_set_input
+
+    """filter the rows which have to be updated"""
+    where: postalcodes_bool_exp!
+  ): postalcodes_mutation_response
+
+  """
+  update single row of the table: "postalcodes"
+  """
+  update_postalcodes_by_pk(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: postalcodes_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: postalcodes_set_input
+    pk_columns: postalcodes_pk_columns_input!
+  ): postalcodes
+
+  """
+  update multiples rows of table: "postalcodes"
+  """
+  update_postalcodes_many(
+    """updates to execute, in order"""
+    updates: [postalcodes_updates!]!
+  ): [postalcodes_mutation_response]
+
+  """
+  update data of the table: "prefectures"
+  """
+  update_prefectures(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: prefectures_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: prefectures_set_input
+
+    """filter the rows which have to be updated"""
+    where: prefectures_bool_exp!
+  ): prefectures_mutation_response
+
+  """
+  update single row of the table: "prefectures"
+  """
+  update_prefectures_by_pk(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: prefectures_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: prefectures_set_input
+    pk_columns: prefectures_pk_columns_input!
+  ): prefectures
+
+  """
+  update multiples rows of table: "prefectures"
+  """
+  update_prefectures_many(
+    """updates to execute, in order"""
+    updates: [prefectures_updates!]!
+  ): [prefectures_mutation_response]
+}
+
+"""column ordering options"""
+enum order_by {
+  """in ascending order, nulls last"""
+  asc
+
+  """in ascending order, nulls first"""
+  asc_nulls_first
+
+  """in ascending order, nulls last"""
+  asc_nulls_last
+
+  """in descending order, nulls first"""
+  desc
+
+  """in descending order, nulls first"""
+  desc_nulls_first
+
+  """in descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""
+columns and relationships of "postalcodes"
+"""
+type postalcodes {
+  code: String!
+  id: Int!
+
+  """An object relationship"""
+  prefecture: prefectures!
+  prefecture_id: Int!
+}
+
+"""
+aggregated selection of "postalcodes"
+"""
+type postalcodes_aggregate {
+  aggregate: postalcodes_aggregate_fields
+  nodes: [postalcodes!]!
+}
+
+input postalcodes_aggregate_bool_exp {
+  count: postalcodes_aggregate_bool_exp_count
+}
+
+input postalcodes_aggregate_bool_exp_count {
+  arguments: [postalcodes_select_column!]
+  distinct: Boolean
+  filter: postalcodes_bool_exp
+  predicate: Int_comparison_exp!
+}
+
+"""
+aggregate fields of "postalcodes"
+"""
+type postalcodes_aggregate_fields {
+  avg: postalcodes_avg_fields
+  count(columns: [postalcodes_select_column!], distinct: Boolean): Int!
+  max: postalcodes_max_fields
+  min: postalcodes_min_fields
+  stddev: postalcodes_stddev_fields
+  stddev_pop: postalcodes_stddev_pop_fields
+  stddev_samp: postalcodes_stddev_samp_fields
+  sum: postalcodes_sum_fields
+  var_pop: postalcodes_var_pop_fields
+  var_samp: postalcodes_var_samp_fields
+  variance: postalcodes_variance_fields
+}
+
+"""
+order by aggregate values of table "postalcodes"
+"""
+input postalcodes_aggregate_order_by {
+  avg: postalcodes_avg_order_by
+  count: order_by
+  max: postalcodes_max_order_by
+  min: postalcodes_min_order_by
+  stddev: postalcodes_stddev_order_by
+  stddev_pop: postalcodes_stddev_pop_order_by
+  stddev_samp: postalcodes_stddev_samp_order_by
+  sum: postalcodes_sum_order_by
+  var_pop: postalcodes_var_pop_order_by
+  var_samp: postalcodes_var_samp_order_by
+  variance: postalcodes_variance_order_by
+}
+
+"""
+input type for inserting array relation for remote table "postalcodes"
+"""
+input postalcodes_arr_rel_insert_input {
+  data: [postalcodes_insert_input!]!
+
+  """upsert condition"""
+  on_conflict: postalcodes_on_conflict
+}
+
+"""aggregate avg on columns"""
+type postalcodes_avg_fields {
+  id: Float
+  prefecture_id: Float
+}
+
+"""
+order by avg() on columns of table "postalcodes"
+"""
+input postalcodes_avg_order_by {
+  id: order_by
+  prefecture_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "postalcodes". All fields are combined with a logical 'AND'.
+"""
+input postalcodes_bool_exp {
+  _and: [postalcodes_bool_exp!]
+  _not: postalcodes_bool_exp
+  _or: [postalcodes_bool_exp!]
+  code: String_comparison_exp
+  id: Int_comparison_exp
+  prefecture: prefectures_bool_exp
+  prefecture_id: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "postalcodes"
+"""
+enum postalcodes_constraint {
+  """
+  unique or primary key constraint on columns "id"
+  """
+  postalcodes_pkey
+}
+
+"""
+input type for incrementing numeric columns in table "postalcodes"
+"""
+input postalcodes_inc_input {
+  id: Int
+  prefecture_id: Int
+}
+
+"""
+input type for inserting data into table "postalcodes"
+"""
+input postalcodes_insert_input {
+  code: String
+  id: Int
+  prefecture: prefectures_obj_rel_insert_input
+  prefecture_id: Int
+}
+
+"""aggregate max on columns"""
+type postalcodes_max_fields {
+  code: String
+  id: Int
+  prefecture_id: Int
+}
+
+"""
+order by max() on columns of table "postalcodes"
+"""
+input postalcodes_max_order_by {
+  code: order_by
+  id: order_by
+  prefecture_id: order_by
+}
+
+"""aggregate min on columns"""
+type postalcodes_min_fields {
+  code: String
+  id: Int
+  prefecture_id: Int
+}
+
+"""
+order by min() on columns of table "postalcodes"
+"""
+input postalcodes_min_order_by {
+  code: order_by
+  id: order_by
+  prefecture_id: order_by
+}
+
+"""
+response of any mutation on the table "postalcodes"
+"""
+type postalcodes_mutation_response {
+  """number of rows affected by the mutation"""
+  affected_rows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [postalcodes!]!
+}
+
+"""
+on_conflict condition type for table "postalcodes"
+"""
+input postalcodes_on_conflict {
+  constraint: postalcodes_constraint!
+  update_columns: [postalcodes_update_column!]! = []
+  where: postalcodes_bool_exp
+}
+
+"""Ordering options when selecting data from "postalcodes"."""
+input postalcodes_order_by {
+  code: order_by
+  id: order_by
+  prefecture: prefectures_order_by
+  prefecture_id: order_by
+}
+
+"""primary key columns input for table: postalcodes"""
+input postalcodes_pk_columns_input {
+  id: Int!
+}
+
+"""
+select columns of table "postalcodes"
+"""
+enum postalcodes_select_column {
+  """column name"""
+  code
+
+  """column name"""
+  id
+
+  """column name"""
+  prefecture_id
+}
+
+"""
+input type for updating data in table "postalcodes"
+"""
+input postalcodes_set_input {
+  code: String
+  id: Int
+  prefecture_id: Int
+}
+
+"""aggregate stddev on columns"""
+type postalcodes_stddev_fields {
+  id: Float
+  prefecture_id: Float
+}
+
+"""
+order by stddev() on columns of table "postalcodes"
+"""
+input postalcodes_stddev_order_by {
+  id: order_by
+  prefecture_id: order_by
+}
+
+"""aggregate stddev_pop on columns"""
+type postalcodes_stddev_pop_fields {
+  id: Float
+  prefecture_id: Float
+}
+
+"""
+order by stddev_pop() on columns of table "postalcodes"
+"""
+input postalcodes_stddev_pop_order_by {
+  id: order_by
+  prefecture_id: order_by
+}
+
+"""aggregate stddev_samp on columns"""
+type postalcodes_stddev_samp_fields {
+  id: Float
+  prefecture_id: Float
+}
+
+"""
+order by stddev_samp() on columns of table "postalcodes"
+"""
+input postalcodes_stddev_samp_order_by {
+  id: order_by
+  prefecture_id: order_by
+}
+
+"""
+Streaming cursor of the table "postalcodes"
+"""
+input postalcodes_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: postalcodes_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input postalcodes_stream_cursor_value_input {
+  code: String
+  id: Int
+  prefecture_id: Int
+}
+
+"""aggregate sum on columns"""
+type postalcodes_sum_fields {
+  id: Int
+  prefecture_id: Int
+}
+
+"""
+order by sum() on columns of table "postalcodes"
+"""
+input postalcodes_sum_order_by {
+  id: order_by
+  prefecture_id: order_by
+}
+
+"""
+update columns of table "postalcodes"
+"""
+enum postalcodes_update_column {
+  """column name"""
+  code
+
+  """column name"""
+  id
+
+  """column name"""
+  prefecture_id
+}
+
+input postalcodes_updates {
+  """increments the numeric columns with given value of the filtered values"""
+  _inc: postalcodes_inc_input
+
+  """sets the columns of the filtered rows to the given values"""
+  _set: postalcodes_set_input
+  where: postalcodes_bool_exp!
+}
+
+"""aggregate var_pop on columns"""
+type postalcodes_var_pop_fields {
+  id: Float
+  prefecture_id: Float
+}
+
+"""
+order by var_pop() on columns of table "postalcodes"
+"""
+input postalcodes_var_pop_order_by {
+  id: order_by
+  prefecture_id: order_by
+}
+
+"""aggregate var_samp on columns"""
+type postalcodes_var_samp_fields {
+  id: Float
+  prefecture_id: Float
+}
+
+"""
+order by var_samp() on columns of table "postalcodes"
+"""
+input postalcodes_var_samp_order_by {
+  id: order_by
+  prefecture_id: order_by
+}
+
+"""aggregate variance on columns"""
+type postalcodes_variance_fields {
+  id: Float
+  prefecture_id: Float
+}
+
+"""
+order by variance() on columns of table "postalcodes"
+"""
+input postalcodes_variance_order_by {
+  id: order_by
+  prefecture_id: order_by
+}
+
+"""
+columns and relationships of "prefectures"
+"""
+type prefectures {
+  id: Int!
+  name: String!
+
+  """An array relationship"""
+  postalcodes(
+    """distinct select on columns"""
+    distinct_on: [postalcodes_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [postalcodes_order_by!]
+
+    """filter the rows returned"""
+    where: postalcodes_bool_exp
+  ): [postalcodes!]!
+
+  """An aggregate relationship"""
+  postalcodes_aggregate(
+    """distinct select on columns"""
+    distinct_on: [postalcodes_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [postalcodes_order_by!]
+
+    """filter the rows returned"""
+    where: postalcodes_bool_exp
+  ): postalcodes_aggregate!
+}
+
+"""
+aggregated selection of "prefectures"
+"""
+type prefectures_aggregate {
+  aggregate: prefectures_aggregate_fields
+  nodes: [prefectures!]!
+}
+
+"""
+aggregate fields of "prefectures"
+"""
+type prefectures_aggregate_fields {
+  avg: prefectures_avg_fields
+  count(columns: [prefectures_select_column!], distinct: Boolean): Int!
+  max: prefectures_max_fields
+  min: prefectures_min_fields
+  stddev: prefectures_stddev_fields
+  stddev_pop: prefectures_stddev_pop_fields
+  stddev_samp: prefectures_stddev_samp_fields
+  sum: prefectures_sum_fields
+  var_pop: prefectures_var_pop_fields
+  var_samp: prefectures_var_samp_fields
+  variance: prefectures_variance_fields
+}
+
+"""aggregate avg on columns"""
+type prefectures_avg_fields {
+  id: Float
+}
+
+"""
+Boolean expression to filter rows from the table "prefectures". All fields are combined with a logical 'AND'.
+"""
+input prefectures_bool_exp {
+  _and: [prefectures_bool_exp!]
+  _not: prefectures_bool_exp
+  _or: [prefectures_bool_exp!]
+  id: Int_comparison_exp
+  name: String_comparison_exp
+  postalcodes: postalcodes_bool_exp
+  postalcodes_aggregate: postalcodes_aggregate_bool_exp
+}
+
+"""
+unique or primary key constraints on table "prefectures"
+"""
+enum prefectures_constraint {
+  """
+  unique or primary key constraint on columns "id"
+  """
+  prefectures_pkey
+}
+
+"""
+input type for incrementing numeric columns in table "prefectures"
+"""
+input prefectures_inc_input {
+  id: Int
+}
+
+"""
+input type for inserting data into table "prefectures"
+"""
+input prefectures_insert_input {
+  id: Int
+  name: String
+  postalcodes: postalcodes_arr_rel_insert_input
+}
+
+"""aggregate max on columns"""
+type prefectures_max_fields {
+  id: Int
+  name: String
+}
+
+"""aggregate min on columns"""
+type prefectures_min_fields {
+  id: Int
+  name: String
+}
+
+"""
+response of any mutation on the table "prefectures"
+"""
+type prefectures_mutation_response {
+  """number of rows affected by the mutation"""
+  affected_rows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [prefectures!]!
+}
+
+"""
+input type for inserting object relation for remote table "prefectures"
+"""
+input prefectures_obj_rel_insert_input {
+  data: prefectures_insert_input!
+
+  """upsert condition"""
+  on_conflict: prefectures_on_conflict
+}
+
+"""
+on_conflict condition type for table "prefectures"
+"""
+input prefectures_on_conflict {
+  constraint: prefectures_constraint!
+  update_columns: [prefectures_update_column!]! = []
+  where: prefectures_bool_exp
+}
+
+"""Ordering options when selecting data from "prefectures"."""
+input prefectures_order_by {
+  id: order_by
+  name: order_by
+  postalcodes_aggregate: postalcodes_aggregate_order_by
+}
+
+"""primary key columns input for table: prefectures"""
+input prefectures_pk_columns_input {
+  id: Int!
+}
+
+"""
+select columns of table "prefectures"
+"""
+enum prefectures_select_column {
+  """column name"""
+  id
+
+  """column name"""
+  name
+}
+
+"""
+input type for updating data in table "prefectures"
+"""
+input prefectures_set_input {
+  id: Int
+  name: String
+}
+
+"""aggregate stddev on columns"""
+type prefectures_stddev_fields {
+  id: Float
+}
+
+"""aggregate stddev_pop on columns"""
+type prefectures_stddev_pop_fields {
+  id: Float
+}
+
+"""aggregate stddev_samp on columns"""
+type prefectures_stddev_samp_fields {
+  id: Float
+}
+
+"""
+Streaming cursor of the table "prefectures"
+"""
+input prefectures_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: prefectures_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input prefectures_stream_cursor_value_input {
+  id: Int
+  name: String
+}
+
+"""aggregate sum on columns"""
+type prefectures_sum_fields {
+  id: Int
+}
+
+"""
+update columns of table "prefectures"
+"""
+enum prefectures_update_column {
+  """column name"""
+  id
+
+  """column name"""
+  name
+}
+
+input prefectures_updates {
+  """increments the numeric columns with given value of the filtered values"""
+  _inc: prefectures_inc_input
+
+  """sets the columns of the filtered rows to the given values"""
+  _set: prefectures_set_input
+  where: prefectures_bool_exp!
+}
+
+"""aggregate var_pop on columns"""
+type prefectures_var_pop_fields {
+  id: Float
+}
+
+"""aggregate var_samp on columns"""
+type prefectures_var_samp_fields {
+  id: Float
+}
+
+"""aggregate variance on columns"""
+type prefectures_variance_fields {
+  id: Float
+}
+
+type query_root {
+  """An array relationship"""
+  postalcodes(
+    """distinct select on columns"""
+    distinct_on: [postalcodes_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [postalcodes_order_by!]
+
+    """filter the rows returned"""
+    where: postalcodes_bool_exp
+  ): [postalcodes!]!
+
+  """An aggregate relationship"""
+  postalcodes_aggregate(
+    """distinct select on columns"""
+    distinct_on: [postalcodes_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [postalcodes_order_by!]
+
+    """filter the rows returned"""
+    where: postalcodes_bool_exp
+  ): postalcodes_aggregate!
+
+  """fetch data from the table: "postalcodes" using primary key columns"""
+  postalcodes_by_pk(id: Int!): postalcodes
+
+  """
+  fetch data from the table: "prefectures"
+  """
+  prefectures(
+    """distinct select on columns"""
+    distinct_on: [prefectures_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [prefectures_order_by!]
+
+    """filter the rows returned"""
+    where: prefectures_bool_exp
+  ): [prefectures!]!
+
+  """
+  fetch aggregated fields from the table: "prefectures"
+  """
+  prefectures_aggregate(
+    """distinct select on columns"""
+    distinct_on: [prefectures_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [prefectures_order_by!]
+
+    """filter the rows returned"""
+    where: prefectures_bool_exp
+  ): prefectures_aggregate!
+
+  """fetch data from the table: "prefectures" using primary key columns"""
+  prefectures_by_pk(id: Int!): prefectures
+}
+
+type subscription_root {
+  """An array relationship"""
+  postalcodes(
+    """distinct select on columns"""
+    distinct_on: [postalcodes_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [postalcodes_order_by!]
+
+    """filter the rows returned"""
+    where: postalcodes_bool_exp
+  ): [postalcodes!]!
+
+  """An aggregate relationship"""
+  postalcodes_aggregate(
+    """distinct select on columns"""
+    distinct_on: [postalcodes_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [postalcodes_order_by!]
+
+    """filter the rows returned"""
+    where: postalcodes_bool_exp
+  ): postalcodes_aggregate!
+
+  """fetch data from the table: "postalcodes" using primary key columns"""
+  postalcodes_by_pk(id: Int!): postalcodes
+
+  """
+  fetch data from the table in a streaming manner: "postalcodes"
+  """
+  postalcodes_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [postalcodes_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: postalcodes_bool_exp
+  ): [postalcodes!]!
+
+  """
+  fetch data from the table: "prefectures"
+  """
+  prefectures(
+    """distinct select on columns"""
+    distinct_on: [prefectures_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [prefectures_order_by!]
+
+    """filter the rows returned"""
+    where: prefectures_bool_exp
+  ): [prefectures!]!
+
+  """
+  fetch aggregated fields from the table: "prefectures"
+  """
+  prefectures_aggregate(
+    """distinct select on columns"""
+    distinct_on: [prefectures_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [prefectures_order_by!]
+
+    """filter the rows returned"""
+    where: prefectures_bool_exp
+  ): prefectures_aggregate!
+
+  """fetch data from the table: "prefectures" using primary key columns"""
+  prefectures_by_pk(id: Int!): prefectures
+
+  """
+  fetch data from the table in a streaming manner: "prefectures"
+  """
+  prefectures_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [prefectures_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: prefectures_bool_exp
+  ): [prefectures!]!
+}
+
