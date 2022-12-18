@@ -1,0 +1,1 @@
+# hasura-export-schema
